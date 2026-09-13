@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Furniture World — Modern Furniture for Every Space</title>
+<meta name="description" content="Empire Furniture World Kampala — sofa sets, beds, wardrobes, centre tables, sideboards & TV stands. Quality furniture at an affordable price.">
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+
+<header>
+  <div class="wrap nav">
+    <!-- ══════════════════════════════════════════════════════════════
+         LOGO  ·  PROFILE PICTURE
+         Replace  src="assets/logo.png"  with YOUR photo / brand logo.
+         Any square image works best — it displays as a circle.
+         ══════════════════════════════════════════════════════════════ -->
+    <a href="#/" class="logo" onclick="goHome(event)">
+      <img class="logo-pic" src="assets/sofa.jpg" alt="Empire Furniture World logo">
+      <span class="logo-text">EMPIRE<span>FURNITURE WORLD</span></span>
+    </a>
+    <nav class="links">
+      <a href="#/" onclick="goHome(event)">Home</a>
+      <a href="#/" id="navCategories" onclick="goCategories(event)">Categories</a>
+      <a href="#why" onclick="goWhy(event)">Why Us</a>
+      <a href="#branches" onclick="goBranches(event)">Branches</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e8e4d8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="search" placeholder="Search furniture…" aria-label="Search products">
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <button class="cart-btn" onclick="toggleCart(true)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 2h3l2.6 12.4a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 2-1.6L22 7H6"/></svg>
+      Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+
+<!-- MOBILE MENU (must stay inside <header> so it drops below it) -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="menuGo('home')">🏠 Home</a>
+  <a onclick="menuGo('cats')">🗂️ Categories</a>
+  <a onclick="menuGo('why')">💎 Why Us</a>
+  <a onclick="menuGo('branches')">📍 Branches</a>
+  <a href="#contact" onclick="closeMenu()">📞 Contact</a>
+  
+  
+</div>
+
+</header>
+
+<!-- ============ DYNAMIC VIEW (home / category / product) ============ -->
+<main id="view"></main>
+
+<!-- ==================== STATIC FOOTER ==================== -->
+<footer id="contact">
+  <div class="wrap foot">
+    <div>
+      <a href="#/" class="logo" onclick="goHome(event)">EMPIRE<span>FURNITURE WORLD</span></a>
+      <p style="margin-top:10px">Turn your house into a home with modern, quality furniture at an affordable price. Serving Kampala from our Nateete &amp; Lungujja branches.</p>
+      <div class="socials">
+        <a href="https://tiktok.com/@empirefurnitureworld" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B301"><path d="M19.6 6.3a5.1 5.1 0 0 1-3.4-3.6c-.1-.5-.2-1-.2-1.5h-3.6v13.6a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V8.3a6.5 6.5 0 1 0 5.6 6.4V8.7a8.6 8.6 0 0 0 4.9 1.5V6.6c-.5 0-1-.1-1.5-.3z"/></svg></a>
+        <a href="https://instagram.com/empirefurnitureworld" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5B301" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.8" cy="6.2" r="1.3" fill="#F5B301" stroke="none"/></svg></a>
+        <a href="https://facebook.com/empirefurnitureworld" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B301"><path d="M14 8.5V6.8c0-.8.2-1.3 1.4-1.3H17V2.5h-2.6C11.2 2.5 10 4.4 10 6.6v1.9H8V12h2v9.5h4V12h2.7l.4-3.5H14z"/></svg></a>
+        <a href="https://youtube.com/@empirefurnitureworld" target="_blank" rel="noopener" aria-label="YouTube"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B301"><path d="M23 7.2s-.2-1.6-.9-2.3c-.9-.9-1.9-.9-2.4-1C16.6 3.6 12 3.6 12 3.6h0s-4.6 0-7.7.3c-.5.1-1.5.1-2.4 1-.7.7-.9 2.3-.9 2.3S.8 9.1.8 11v1.8c0 1.9.2 3.8.2 3.8s.2 1.6.9 2.3c.9.9 2 .9 2.5 1 1.8.2 7.6.3 7.6.3s4.6 0 7.7-.4c.5-.1 1.5-.1 2.4-1 .7-.7.9-2.3.9-2.3s.2-1.9.2-3.8V11c0-1.9-.2-3.8-.2-3.8zM9.7 15V8.4l6.2 3.3L9.7 15z"/></svg></a>
+      </div>
+      <p style="margin-top:12px">@empirefurnitureworld — latest designs, offers &amp; updates.</p>
+    </div>
+    <div>
+      <h4>COLLECTIONS</h4>
+      <ul id="footCats"></ul>
+    </div>
+    <div>
+      <h4>CONTACT</h4>
+      <ul>
+        <li>📍 Nateete Branch &amp; Lungujja Branch</li>
+        <li>📍 Kampala, Uganda</li>
+        <li>📞 <a href="tel:+256705381983">0705 381 983</a></li>
+        <li>📞 <a href="tel:+256771032137">0771 032 137</a></li>
+        <li>💬 <a href="https://wa.me/256705381983" target="_blank" rel="noopener">WhatsApp Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="copy">© 2026 Empire Furniture World. Quality Furniture at an Affordable Price. All rights reserved.</div>
+</footer>
+
+<!-- ==================== CART DRAWER ==================== -->
+<div class="overlay" id="overlay" onclick="toggleCart(false)"></div>
+<aside class="drawer" id="drawer" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <h3>🛒 Your Cart</h3>
+    <button class="close-x" onclick="toggleCart(false)" aria-label="Close cart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="total-row"><span>Subtotal</span><span id="cartTotal">UGX 0</span></div>
+    <button class="btn checkout" id="checkoutBtn" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</aside>
+
+<!-- ==================== CHECKOUT MODAL ==================== -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-box">
+    <h3>Complete Your Order</h3>
+    <p class="sub">Fill in your details — we'll confirm on WhatsApp within minutes.</p>
+    <div class="field"><label>Full Name *</label><input id="fName" placeholder="e.g. John Mukasa"></div>
+    <div class="row2">
+      <div class="field"><label>Phone Number *</label><input id="fPhone" placeholder="07XX XXX XXX"></div>
+      <div class="field"><label>Delivery Option</label>
+        <select id="fDelivery">
+          <option>Door Delivery (Kampala)</option>
+          <option>Pickup — Nateete Branch</option>
+          <option>Pickup — Lungujja Branch</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Delivery Address</label><textarea id="fAddress" rows="2" placeholder="Street, area, landmark…"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeCheckout()">Cancel</button>
+      <button class="btn wa" onclick="submitOrder()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.1.2-.3.3-.1.6.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4.1.2.1.7-.1 1.2z"/></svg>
+        Order via WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+<div class="modal" id="productModal">
+  <div class="modal-box product-box" id="productBox"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     WHATSAPP FLOATING BUTTON
+     Change the number in the link below to switch chat destination.
+     Format: country code + number, no "+" or spaces  (256... = Uganda)
+     ══════════════════════════════════════════════════════════════ -->
+<a class="wa-float" href="https://wa.me/256705381983?text=Hello%20Empire%20Furniture%20World!%20I%27m%20interested%20in%20your%20furniture." target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <span class="wa-tip">Chat with us 👋</span>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.1.2-.3.3-.1.6.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.9 1.8.3.2.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2.1 1c.3.2.5.3.6.4.1.2.1.7-.1 1.2z"/></svg>
+</a>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js?v=4"></script>
+</body>
+</html>
