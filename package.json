@@ -1,0 +1,8 @@
+{
+  "name": "empire-furniture-world",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": { "dev": "netlify dev" },
+  "dependencies": { "@netlify/blobs": "latest" },
+  "devDependencies": { "netlify-cli": "latest" }
+}
