@@ -1,4 +1,4 @@
-    /*groceries = ['Milk', 'Bread' ,'Apples', 'Meat' , 'Chicken'];
+    groceries = ['Milk', 'Bread' ,'Apples', 'Meat' , 'Chicken'];
     console.log(groceries);
     console.log(groceries.length);
     groceries[1] = 'Bananas';
@@ -49,7 +49,7 @@ function isName() {
         console.log("is other name");
      }
 }
-isName(); */
+isName(); 
 
 
 
