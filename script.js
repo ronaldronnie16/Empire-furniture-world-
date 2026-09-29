@@ -19,10 +19,10 @@ const CATEGORIES = [
 
   { name: "Sofa Sets",     img: "assets/sofa.jpg",     blurb: "Comfort & style for your living room" },
   { name: "Beds",          img: "assets/bed.jpg",          blurb: "Sleep in luxury, wake up refreshed" },
-  { name: "Centre Tables", img: "assets/centre.jpg", blurb: "Statement pieces for every lounge" },
-  { name: "Wardrobes",     img: "assets/wardrobe.jpg",     blurb: "Smart storage, custom built" },
+  { name: "Centre Tables", img: "assets/centretables.jpg", blurb: "Statement pieces for every lounge" },
+  { name: "Wardrobes",     img: "assets/dressm.jpg",     blurb: "Smart storage, custom built" },
   { name: "Sideboards",    img: "assets/side.jpg",    blurb: "Elegant storage for dining & halls" },
-  { name: "TV Stands",     img: "assets/tv.jpg",     blurb: "Entertainment units that impress" },
+  { name: "TV Stands",     img: "assets/tvstand.jpg",     blurb: "Entertainment units that impress" },
 
 ];
 
