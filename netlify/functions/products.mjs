@@ -51,11 +51,18 @@ async function migrateOrSeed() {
   for (const p of source) await store.setJSON(`${PREFIX}${p.id}`, p);
 }
 
+function normalizeProduct(p) {
+  if (!p || typeof p !== 'object') return null;
+  const rating = Math.max(0, Math.min(5, Number(p.rating) || 0));
+  const reviews = Math.max(0, Number(p.reviews) || 0);
+  return { ...p, rating, reviews };
+}
+
 export async function getAllProducts() {
   await migrateOrSeed();
   const keys = await listProductKeys();
   const products = await Promise.all(keys.map(key => store.get(key, { type: 'json' })));
-  return products.filter(Boolean);
+  return products.map(normalizeProduct).filter(Boolean);
 }
 
 export async function getProduct(id) {
@@ -64,7 +71,7 @@ export async function getProduct(id) {
 }
 
 export async function saveProduct(product) {
-  await store.setJSON(`${PREFIX}${product.id}`, product);
+  await store.setJSON(`${PREFIX}${product.id}`, normalizeProduct(product));
 }
 
 export async function deleteProduct(id) {

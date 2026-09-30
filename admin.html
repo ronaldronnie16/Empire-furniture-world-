@@ -7,7 +7,7 @@
 <title>EFW Admin</title>
 <style>
 :root{--bg:#050507;--panel:#101014;--panel2:#16161c;--line:#292933;--gold:#f0b429;--gold2:#ffd66b;--text:#ece8dc;--muted:#96917f;--danger:#d85d5d}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui,sans-serif}.wrap{max-width:1100px;margin:auto;padding:28px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.brand{font-weight:900;letter-spacing:1px}.brand span{display:block;color:var(--gold);font-size:.7rem;letter-spacing:3px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:20px}.login{max-width:430px;margin:10vh auto}.h2{font-size:1.35rem;font-weight:900;margin:0 0 6px}.muted{color:var(--muted)}label{display:block;font-size:.82rem;font-weight:800;margin:15px 0 7px}input,select,textarea{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);outline:none;font:inherit}input:focus,select:focus,textarea:focus{border-color:var(--gold)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.full{grid-column:1/-1}.btn{border:0;border-radius:999px;padding:12px 18px;font-weight:900;cursor:pointer;background:var(--gold);color:#090909}.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}.btn.danger{background:transparent;border:1px solid #693434;color:#ff8d8d}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.msg{margin-top:12px;color:var(--gold2);min-height:20px}.products{display:grid;gap:10px}.product{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#0c0c10}.thumb{width:72px;height:58px;border-radius:9px;object-fit:cover;background:#181820;flex:none}.info{min-width:0;flex:1}.name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:.8rem;color:var(--muted);margin-top:3px}.price{color:var(--gold2);font-weight:900}.empty{padding:25px;text-align:center;color:var(--muted)}.file-note{font-size:.76rem;color:var(--muted);margin-top:6px}.preview{display:none;width:110px;height:80px;object-fit:cover;border-radius:10px;margin-top:10px;border:1px solid var(--line)}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.product{align-items:flex-start}.top{align-items:flex-start;flex-direction:column}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui,sans-serif}.wrap{max-width:1100px;margin:auto;padding:28px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.brand{font-weight:900;letter-spacing:1px}.brand span{display:block;color:var(--gold);font-size:.7rem;letter-spacing:3px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:20px}.login{max-width:430px;margin:10vh auto}.h2{font-size:1.35rem;font-weight:900;margin:0 0 6px}.muted{color:var(--muted)}label{display:block;font-size:.82rem;font-weight:800;margin:15px 0 7px}input,select,textarea{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);outline:none;font:inherit}input:focus,select:focus,textarea:focus{border-color:var(--gold)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.full{grid-column:1/-1}.btn{border:0;border-radius:999px;padding:12px 18px;font-weight:900;cursor:pointer;background:var(--gold);color:#090909}.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}.btn.danger{background:transparent;border:1px solid #693434;color:#ff8d8d}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.msg{margin-top:12px;color:var(--gold2);min-height:20px}.products{display:grid;gap:10px}.product{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#0c0c10}.thumb{width:72px;height:58px;border-radius:9px;object-fit:cover;background:#181820;flex:none}.info{min-width:0;flex:1}.name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:.8rem;color:var(--muted);margin-top:3px}.price{color:var(--gold2);font-weight:900}.empty{padding:25px;text-align:center;color:var(--muted)}.file-note{font-size:.76rem;color:var(--muted);margin-top:6px}.preview{display:none;width:110px;height:80px;object-fit:cover;border-radius:10px;margin-top:10px;border:1px solid var(--line)}.stars-picker{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.star-btn{border:1px solid var(--line);background:var(--panel2);color:#5e5a50;border-radius:10px;padding:7px 9px;font-size:1.2rem;line-height:1;cursor:pointer}.star-btn.active{color:var(--gold);border-color:var(--gold);background:#211a0b}.star-count{font-size:.8rem;color:var(--muted);margin-left:4px}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.product{align-items:flex-start}.top{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
@@ -18,11 +18,11 @@
 <div class="panel"><h2 class="h2">Add Product</h2><p class="muted">Add as many products as your Netlify storage allows. New products appear on the public website automatically.</p>
 <form id="productForm"><div class="grid">
 <div><label>Product name *</label><input id="name" required placeholder="e.g. L-shaped sofa set"></div>
-<div><label>Category *</label><select id="category"><option>Sofa Sets</option><option>Beds</option><option>Centre Tables</option><option>Wardrobes</option><option>Sideboards</option><option>TV Stands</option><option>Other</option></select></div>
+<div><label>Category *</label><select id="category" required><option value="">Loading categories…</option></select><div class="file-note">Categories are read from the categories defined in <b>script.js</b>. New coded categories will appear here automatically.</div></div>
 <div><label>Price (UGX) *</label><input id="price" type="number" min="1" required placeholder="900000"></div>
 <div><label>Old price (optional)</label><input id="old" type="number" min="0" placeholder="1000000"></div>
 <div><label>Tag</label><select id="tag"><option value="">None</option><option>Best Seller</option><option>Hot Deal</option><option>New</option></select></div>
-<div><label>Star rating</label><select id="rating" aria-label="Product star rating"><option value="5">★★★★★ — 5 stars</option><option value="4">★★★★☆ — 4 stars</option><option value="3">★★★☆☆ — 3 stars</option><option value="2">★★☆☆☆ — 2 stars</option><option value="1">★☆☆☆☆ — 1 star</option></select></div>
+<div><label>Star rating *</label><input type="hidden" id="rating" value="5"><div id="ratingPicker" class="stars-picker" role="radiogroup" aria-label="Product star rating"></div><div id="ratingCount" class="star-count">5 / 5 stars</div></div>
 <div><label>Product photo from your phone/computer</label><input id="imageFile" type="file" accept="image/*"><div class="file-note">Choose an image file. It will be uploaded to the site automatically. Maximum 4 MB per image.</div><img id="preview" class="preview" alt="Preview"></div>
 <div class="full"><label>Or image path / URL (optional)</label><input id="img" placeholder="assets/sofa.jpg or https://..."></div>
 <div class="full"><label>Description</label><textarea id="desc" rows="3" placeholder="Short product description..."></textarea></div>
@@ -30,17 +30,63 @@
 <div class="panel"><h2 class="h2">Products <span id="count" class="muted" style="font-size:.85rem"></span></h2><p class="muted">There is no fixed product-count limit in the admin code; each product is stored separately.</p><div id="products" class="products"></div></div>
 </div>
 <script>
-const $=id=>document.getElementById(id);const API='/.netlify/functions/admin';
+const $=id=>document.getElementById(id);const API='/.netlify/functions/admin';const PUBLIC_SCRIPT='/script.js';
 function msg(id,text){$(id).textContent=text}
 async function api(url,options={}){const r=await fetch(url,{credentials:'include',...options});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||'Request failed');return data}
 async function check(){try{await api(API);showAdmin();loadProducts()}catch{showLogin()}}
 function showLogin(){$('loginView').hidden=false;$('adminView').hidden=true}function showAdmin(){$('loginView').hidden=true;$('adminView').hidden=false}
 $('loginForm').onsubmit=async e=>{e.preventDefault();msg('loginMsg','Signing in…');try{await api(API+'?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});$('password').value='';showAdmin();loadProducts()}catch(err){msg('loginMsg',err.message)}};
 $('imageFile').onchange=()=>{const f=$('imageFile').files[0];const p=$('preview');if(!f){p.style.display='none';return}p.src=URL.createObjectURL(f);p.style.display='block'};
-$('productForm').onsubmit=async e=>{e.preventDefault();msg('formMsg','Uploading product…');const fd=new FormData();fd.append('name',$('name').value);fd.append('category',$('category').value);fd.append('price',$('price').value);fd.append('old',$('old').value);fd.append('tag',$('tag').value);fd.append('rating',$('rating').value);fd.append('img',$('img').value);fd.append('desc',$('desc').value);const file=$('imageFile').files[0];if(file)fd.append('imageFile',file);try{await api(API,{method:'POST',body:fd});e.target.reset();$('preview').style.display='none';msg('formMsg','Product added successfully.');loadProducts()}catch(err){msg('formMsg',err.message)}};
-async function loadProducts(){try{const items=await api(API);$('count').textContent='('+items.length+')';$('products').innerHTML=items.length?items.map(p=>`<div class="product"><img class="thumb" src="${escapeAttr(p.img||'')}" onerror="this.style.visibility='hidden'" alt=""><div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta">${escapeHtml(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span> · <span title="${Number(p.rating)||0} stars">${'★'.repeat(Math.min(5,Math.max(0,Number(p.rating)||0)))}${'☆'.repeat(5-Math.min(5,Math.max(0,Number(p.rating)||0)))}</span></div></div><button class="btn danger" onclick="removeProduct('${encodeURIComponent(String(p.id))}','${escapeAttr(p.name)}')">Remove</button></div>`).join(''):'<div class="empty">No products yet.</div>'}catch(err){$('products').innerHTML='<div class="empty">'+escapeHtml(err.message)+'</div>'}}
+$('productForm').onsubmit=async e=>{e.preventDefault();msg('formMsg','Uploading product…');const fd=new FormData();fd.append('name',$('name').value);fd.append('category',$('category').value);fd.append('price',$('price').value);fd.append('old',$('old').value);fd.append('tag',$('tag').value);fd.append('rating',$('rating').value);fd.append('reviews','0');fd.append('img',$('img').value);fd.append('desc',$('desc').value);const file=$('imageFile').files[0];if(file)fd.append('imageFile',file);try{await api(API,{method:'POST',body:fd});e.target.reset();$('preview').style.display='none';msg('formMsg','Product added successfully.');loadProducts()}catch(err){msg('formMsg',err.message)}};
+async function loadProducts(){
+  try{
+    const items=await api(API);
+    $('count').textContent='('+items.length+')';
+    $('products').innerHTML=items.length?items.map(p=>{
+      const r=Math.max(0,Math.min(5,Number(p.rating)||0));
+      return `<div class="product"><img class="thumb" src="${escapeAttr(p.img||'')}" onerror="this.style.visibility='hidden'" alt="><div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta">${escapeHtml(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span> · <span aria-label="${r} stars">${'★'.repeat(r)}${'☆'.repeat(5-r)}</span></div></div><button type="button" class="btn danger remove-product" data-id="${escapeAttr(String(p.id))}" data-name="${escapeAttr(p.name||'this product')}">Remove</button></div>`;
+    }).join(''):'<div class="empty">No products yet.</div>';
+    document.querySelectorAll('.remove-product').forEach(btn=>btn.addEventListener('click',()=>removeProduct(btn.dataset.id,btn.dataset.name)));
+  }catch(err){$('products').innerHTML='<div class="empty">'+escapeHtml(err.message)+'</div>'}
+}
 async function removeProduct(id,name){if(!confirm('Remove '+name+' from the catalogue?'))return;try{await api(API+'?id='+id,{method:'DELETE'});loadProducts()}catch(err){alert(err.message)}}
 async function logout(){await api(API+'?action=logout',{method:'POST'}).catch(()=>{});showLogin()}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}function escapeAttr(s){return escapeHtml(s).replace(/`/g,'&#96;')}
+function setRating(value){
+  const n=Math.max(1,Math.min(5,Number(value)||5));
+  $('rating').value=String(n);
+  $('ratingCount').textContent=n+' / 5 stars';
+  document.querySelectorAll('#ratingPicker .star-btn').forEach(btn=>{
+    const v=Number(btn.dataset.rating);
+    btn.classList.toggle('active',v<=n);
+    btn.setAttribute('aria-checked',v===n?'true':'false');
+  });
+}
+function buildRatingPicker(){
+  $('ratingPicker').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="star-btn" data-rating="${n}" role="radio" aria-label="${n} star${n>1?'s':''}" onclick="setRating(${n})">★</button>`).join('');
+  setRating(5);
+}
+async function loadCategories(){
+  const names=[];
+  try{
+    const r=await fetch(PUBLIC_SCRIPT,{cache:'no-store'});
+    const text=await r.text();
+    const match=text.match(/const\s+CATEGORIES\s*=\s*\[([\s\S]*?)\]\s*;/);
+    if(match){
+      const re=/name\s*:\s*(["'])(.*?)\1/g; let m;
+      while((m=re.exec(match[1]))) names.push(m[2]);
+    }
+  }catch(err){ console.warn('Could not read public categories:',err); }
+  try{
+    const products=await api(API);
+    for(const p of products){const c=String(p.category||'').trim();if(c) names.push(c);}
+  }catch(err){ console.warn('Could not read product categories:',err); }
+  const unique=[...new Set(names.filter(Boolean))];
+  if(!unique.includes('Other')) unique.push('Other');
+  $('category').innerHTML=unique.map(c=>`<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+}
+$('productForm').addEventListener('reset',()=>setTimeout(setRating,0,5));
+buildRatingPicker();
 check();
+loadCategories();
 </script></body></html>

@@ -61,8 +61,9 @@ const WHATSAPP = "256705381983";   // WhatsApp number (country code + number)
 const $       = id  => document.getElementById(id);
 const fmt     = n   => "UGX " + n.toLocaleString("en-US");
 const byId    = id  => PRODUCTS.find(p => String(p.id) === String(id));
+const safeRating = r => Math.max(0, Math.min(5, Number(r) || 0));
 const inCat   = cat => PRODUCTS.filter(p => p.category === cat);
-const stars   = r   => { const n = Math.min(5, Math.max(0, Number(r) || 0)); return "★".repeat(n) + "☆".repeat(5 - n); };
+const stars   = r   => { const n = safeRating(r); return "★".repeat(n) + "☆".repeat(5 - n); };
 
 let cart        = JSON.parse(localStorage.getItem("efw_cart_v2") || "{}");
 let currentSort = "featured";
@@ -72,18 +73,19 @@ let currentSort = "featured";
 function cardHTML(p) {
 
   const tagClass = p.tag === "Hot Deal" ? "ember" : p.tag === "New" ? "ghost" : "gold";
+  const productId = JSON.stringify(p.id);
 
   return `
   <div class="card">
-    <div class="imgwrap" onclick="openProduct(${JSON.stringify(p.id)})">
+    <div class="imgwrap" onclick="openProduct(${productId})">
       ${p.tag ? `<span class="tag ${tagClass}">${p.tag}</span>` : ""}
       <img src="${p.img}" alt="${p.name}" loading="lazy">
-      <button class="quick" onclick="event.stopPropagation();openProduct(${JSON.stringify(p.id)})">👁 Quick View</button>
+      <button class="quick" onclick="event.stopPropagation();openProduct(${productId})">👁 Quick View</button>
     </div>
     <div class="card-body">
       <span class="cat">${p.category}</span>
-      <h3 onclick="openProduct(${JSON.stringify(p.id)})">${p.name}</h3>
-      <div class="stars">${stars(p.rating)} <span>(${p.reviews})</span></div>
+      <h3 onclick="openProduct(${productId})">${p.name}</h3>
+      <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">${stars(p.rating)} <span>(${Number(p.reviews) || 0})</span></div>
       <div class="price-row">
         <span class="price">${fmt(p.price)}</span>
         ${p.old ? `<span class="old-price">${fmt(p.old)}</span>` : ""}
@@ -104,7 +106,7 @@ function renderHome() {
   const newArrivals = PRODUCTS.filter(p => p.tag === "New");
 
   const catTiles = CATEGORIES.map(c => `
-    <div class="cat-tile" onclick="showCategory('${c.name}')">
+    <div class="cat-tile" onclick="showCategory(${JSON.stringify(c.name)})">
       <span class="ct-arrow">→</span>
       <img src="${c.img}" alt="${c.name}" loading="lazy">
       <div class="ct-info">
@@ -223,6 +225,7 @@ function showCategory(cat) {
   currentSort = "featured";
 
   const c = CATEGORIES.find(x => x.name === cat);
+  if (!c) { goHome(); return; }
 
   $("view").innerHTML = `
 
@@ -242,7 +245,7 @@ function showCategory(cat) {
       <div class="toolbar" style="margin-top:24px">
         <button class="back-btn" onclick="goHome()">← All Categories</button>
         <span class="count" id="catCount"></span>
-        <select id="sortSel" onchange="currentSort=this.value;renderCatGrid('${cat}')">
+        <select id="sortSel" onchange="currentSort=this.value;renderCatGrid(${JSON.stringify(cat)})">
           <option value="featured">Sort: Featured</option>
           <option value="low">Price: Low → High</option>
           <option value="high">Price: High → Low</option>
@@ -257,7 +260,7 @@ function showCategory(cat) {
         <div class="sec-head"><div><div class="kicker">Keep Exploring</div><h2>Other Collections</h2></div></div>
         <div class="cat-grid">
           ${CATEGORIES.filter(x => x.name !== cat).map(x => `
-          <div class="cat-tile" onclick="showCategory('${x.name}')">
+          <div class="cat-tile" onclick="showCategory(${JSON.stringify(x.name)})">
             <span class="ct-arrow">→</span>
             <img src="${x.img}" alt="${x.name}" loading="lazy">
             <div class="ct-info">
@@ -320,6 +323,7 @@ function openProduct(id) {
 
   const related = inCat(p.category).filter(x => x.id !== id).slice(0, 6);
   const tagClass = p.tag === "Hot Deal" ? "ember" : p.tag === "New" ? "ghost" : "gold";
+  const productId = JSON.stringify(p.id);
 
   $("productBox").innerHTML = `
     <div class="pd-grid">
@@ -331,13 +335,13 @@ function openProduct(id) {
       <div class="pd-body">
         <span class="cat">${p.category}</span>
         <h2>${p.name}</h2>
-        <div class="stars">${stars(p.rating)} <span>${p.reviews} reviews</span></div>
+        <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">${stars(p.rating)} <span>${Number(p.reviews) || 0} reviews</span></div>
         <div class="pd-price"><span class="price">${fmt(p.price)}</span>${p.old ? `<span class="old-price">${fmt(p.old)}</span>` : ""}</div>
         <p class="pd-desc">${p.desc}</p>
         <div class="pd-specs"><span>✓ High quality</span><span>✓ Custom sizes available</span><span>✓ 1-year warranty</span><span>✓ Free Kampala delivery over UGX 2M</span></div>
         <div class="pd-actions">
-          <button class="btn" onclick="addToCart(${JSON.stringify(p.id)})">＋ Add to Cart</button>
-          <button class="btn wa" onclick="buyNow(${p.id})">Buy Now</button>
+          <button class="btn" onclick="addToCart(${productId})">＋ Add to Cart</button>
+          <button class="btn wa" onclick="buyNow(${productId})">Buy Now</button>
         </div>
       </div>
     </div>
@@ -371,28 +375,30 @@ function buyNow(id) {
 function saveCart() { localStorage.setItem("efw_cart_v2", JSON.stringify(cart)); }
 
 function addToCart(id, silent) {
-  cart[id] = (cart[id] || 0) + 1;
+  const key = String(id);
+  cart[key] = (Number(cart[key]) || 0) + 1;
   saveCart();
   renderCart();
   if (!silent) { toast("Added to cart ✓"); toggleCart(true); }
 }
 
 function changeQty(id, d) {
-  cart[id] += d;
-  if (cart[id] <= 0) delete cart[id];
+  const key = String(id);
+  cart[key] = (Number(cart[key]) || 0) + Number(d);
+  if (cart[key] <= 0) delete cart[key];
   saveCart();
   renderCart();
 }
 
 function removeItem(id) {
-  delete cart[id];
+  delete cart[String(id)];
   saveCart();
   renderCart();
 }
 
 function cartEntries() {
   return Object.entries(cart)
-    .map(([id, qty]) => ({ ...byId(id), qty }))
+    .map(([id, qty]) => ({ ...byId(id), qty: Number(qty) || 0 }))
     .filter(e => e.id);
 }
 
@@ -417,11 +423,11 @@ function renderCart() {
         <div class="p">${fmt(e.price)} × ${e.qty}</div>
       </div>
       <div class="qty">
-        <button onclick="changeQty(${e.id},-1)" aria-label="Decrease">−</button>
+        <button onclick="changeQty(${JSON.stringify(e.id)},-1)" aria-label="Decrease">−</button>
         <span>${e.qty}</span>
-        <button onclick="changeQty(${e.id},1)" aria-label="Increase">+</button>
+        <button onclick="changeQty(${JSON.stringify(e.id)},1)" aria-label="Increase">+</button>
       </div>
-      <button class="rm" onclick="removeItem(${e.id})" aria-label="Remove">🗑</button>
+      <button class="rm" onclick="removeItem(${JSON.stringify(e.id)})" aria-label="Remove">🗑</button>
     </div>`).join("")
 
     : `<div class="cart-empty">🛒<br><br>Your cart is empty.<br>Browse our collections and add something you love!</div>`;
