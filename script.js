@@ -18,11 +18,12 @@
 const CATEGORIES = [
 
   { name: "Sofa Sets",     img: "assets/sofa.jpg",     blurb: "Comfort & style for your living room" },
-  { name: "Beds",          img: "assets/bed.jpg",          blurb: "Sleep in luxury, wake up refreshed" },
+  { name: "Beds",          img: "assets/bed.png",          blurb: "Sleep in luxury, wake up refreshed" },
   { name: "Centre Tables", img: "assets/centretables.jpg", blurb: "Statement pieces for every lounge" },
   { name: "Wardrobes",     img: "assets/dressm.jpg",     blurb: "Smart storage, custom built" },
-  { name: "Sideboards",    img: "assets/side.jpg",    blurb: "Elegant storage for dining & halls" },
+  { name: "Sideboards",    img: "assets/side.png",    blurb: "Elegant storage for dining & halls" },
   { name: "TV Stands",     img: "assets/tvstand.jpg",     blurb: "Entertainment units that impress" },
+  { name: "Set of products",     img: "assets/combo.jpg",     blurb: "Grab many at fair prices" }
 
 ];
 
@@ -59,9 +60,9 @@ const WHATSAPP = "256705381983";   // WhatsApp number (country code + number)
 
 const $       = id  => document.getElementById(id);
 const fmt     = n   => "UGX " + n.toLocaleString("en-US");
-const byId    = id  => PRODUCTS.find(p => p.id === id);
+const byId    = id  => PRODUCTS.find(p => String(p.id) === String(id));
 const inCat   = cat => PRODUCTS.filter(p => p.category === cat);
-const stars   = r   => "★".repeat(r) + "☆".repeat(5 - r);
+const stars   = r   => { const n = Math.min(5, Math.max(0, Number(r) || 0)); return "★".repeat(n) + "☆".repeat(5 - n); };
 
 let cart        = JSON.parse(localStorage.getItem("efw_cart_v2") || "{}");
 let currentSort = "featured";
@@ -391,7 +392,7 @@ function removeItem(id) {
 
 function cartEntries() {
   return Object.entries(cart)
-    .map(([id, qty]) => ({ ...byId(+id), qty }))
+    .map(([id, qty]) => ({ ...byId(id), qty }))
     .filter(e => e.id);
 }
 
