@@ -75,7 +75,7 @@ header{position:sticky}/* anchors the absolute menu to the header */
 .badge b{color:var(--gold)}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--gold),#c98f0e);color:#0a0a0c;font-weight:800;padding:13px 26px;border-radius:999px;font-size:.98rem;transition:.2s;box-shadow:0 8px 24px rgba(240,180,41,.22)}
+.btn{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--gold),#c98f0e);color:#0a0a0c;font-weight:700;padding:10px 15px;border-radius:999px;font-size:.80rem;transition:.2s;box-shadow:0 8px 24px rgba(240,180,41,.22)}
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(240,180,41,.38)}
 .btn.ghost{background:transparent;color:var(--gold);border:2px solid var(--gold);box-shadow:none}
 .btn.ghost:hover{background:var(--gold);color:#0a0a0c}
