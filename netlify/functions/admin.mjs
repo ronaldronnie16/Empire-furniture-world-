@@ -2,7 +2,7 @@ import { getStore } from '@netlify/blobs';
 import crypto from 'node:crypto';
 import { getAllProducts, saveProduct, deleteProduct } from './products.mjs';
 
-const store = getStore('empire-furniture');
+const store = getStore({ name: 'empire-furniture', consistency: 'strong' });
 const sessionPrefix = 'sessions/';
 const imagePrefix = 'images/';
 const COOKIE = 'empire_admin';

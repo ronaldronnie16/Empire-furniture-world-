@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
-const store = getStore('empire-furniture');
+const store = getStore({ name: 'empire-furniture', consistency: 'strong' });
 const PREFIX = 'products/';
 
 function normalizeProduct(p) {

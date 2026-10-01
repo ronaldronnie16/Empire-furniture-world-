@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
-const store = getStore('empire-furniture');
+const store = getStore({ name: 'empire-furniture', consistency: 'strong' });
 
 export default async (req) => {
   const url = new URL(req.url);
