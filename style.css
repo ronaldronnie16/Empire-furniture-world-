@@ -85,9 +85,29 @@ section{padding:60px 0}
 .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:30px;flex-wrap:wrap}
 .sec-head .kicker{color:var(--gold);letter-spacing:4px;font-weight:800;font-size:.75rem;text-transform:uppercase}
 .sec-head h2{font-size:clamp(1.5rem,2.8vw,2.1rem);font-weight:900;margin-top:5px}
-.sec-head .see-all{color:var(--muted);font-weight:700;font-size:.88rem;transition:.2s}
-.sec-head .see-all:hover{color:var(--gold)}
+  .sec-head .see-all{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+  padding:10px 16px;
+  border-radius:10px;
+  font-family:inherit;
+  font-size:.9rem;
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+  transition:.2s ease;
+}
 
+.sec-head .see-all:hover{
+  background:var(--gold);
+  color:#080808;
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(240,180,41,.22);
+}
 /* ---------- category tiles ---------- */
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
 .cat-tile{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10;cursor:pointer;background:var(--panel);transition:.3s;display:block}

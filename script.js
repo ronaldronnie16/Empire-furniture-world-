@@ -719,7 +719,7 @@ function toast(message) {
   t.classList.add("show");
 
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 2400);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 4000);
 }
 
 /* ------------------------------------------------------------
