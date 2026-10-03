@@ -718,19 +718,26 @@ function rebuildFooterCategories() {
 let toastTimer;
 
 function toast(message) {
-  const t = $("toast");
+  const t = document.getElementById("toast");
   if (!t) return;
 
-  // Clear any previous timer
+  // Cancel any previous timer
   clearTimeout(toastTimer);
 
   // Show notification
   t.textContent = message;
-  t.classList.add("show");
 
-  // Completely remove it after 5 seconds
+  t.style.display = "block";
+  t.style.opacity = "1";
+  t.style.visibility = "visible";
+  t.style.pointerEvents = "auto";
+
+  // Completely hide after 5 seconds
   toastTimer = setTimeout(() => {
-    t.classList.remove("show");
+    t.style.opacity = "0";
+    t.style.visibility = "hidden";
+    t.style.pointerEvents = "none";
+    t.style.display = "none";
     t.textContent = "";
   }, 5000);
 }
