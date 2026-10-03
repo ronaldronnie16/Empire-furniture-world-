@@ -117,9 +117,9 @@ function cardHTML(p) {
         <h3 onclick="openProduct('${id}')">${esc(p.name)}</h3>
 
         <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">
-          ${stars(p.rating)}
-          <span>(${p.reviews})</span>
-        </div>
+  ${stars(p.rating)}
+  <span>(${p.reviews})</span>
+</div>
 
         <div class="price-row">
           <span class="price">${fmt(p.price)}</span>
@@ -406,16 +406,22 @@ function openProduct(id) {
         <h2>${esc(p.name)}</h2>
 
         <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">
-          ${stars(p.rating)}
-          <span>${p.reviews} reviews</span>
-        </div>
+  ${stars(p.rating)}
+  <span>(${safeRating(p.rating)})</span>
+</div>
 
         <div class="pd-price">
           <span class="price">${fmt(p.price)}</span>
           ${p.old && p.old > p.price ? `<span class="old-price">${fmt(p.old)}</span>` : ""}
         </div>
 
-        <p class="pd-desc">${esc(p.desc || "Quality furniture from Empire Furniture World.")}</p>
+       <div class="pd-description">
+  <h4>Product Description</h4>
+  <p>${esc(
+    p.desc ||
+    "Quality furniture from Empire Furniture World."
+  )}</p>
+</div>
 
         <div class="pd-specs">
           <span>✓ High quality</span>
@@ -715,11 +721,18 @@ function toast(message) {
   const t = $("toast");
   if (!t) return;
 
+  // Clear any previous timer
+  clearTimeout(toastTimer);
+
+  // Show notification
   t.textContent = message;
   t.classList.add("show");
 
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 4000);
+  // Completely remove it after 5 seconds
+  toastTimer = setTimeout(() => {
+    t.classList.remove("show");
+    t.textContent = "";
+  }, 5000);
 }
 
 /* ------------------------------------------------------------
