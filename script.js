@@ -118,7 +118,7 @@ function cardHTML(p) {
 
         <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">
   ${stars(p.rating)}
-  <span>(${p.reviews})</span>
+ <span>(${safeRating(p.rating)})</span>
 </div>
 
         <div class="price-row">
@@ -739,7 +739,7 @@ function toast(message) {
     t.style.pointerEvents = "none";
     t.style.display = "none";
     t.textContent = "";
-  }, 5000);
+  }, 3000);
 }
 
 /* ------------------------------------------------------------
