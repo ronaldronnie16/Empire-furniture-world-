@@ -520,3 +520,26 @@ footer{border-top:1px solid var(--line);background:#030304;padding:48px 0 26px}
     max-height:360px;
   }
 }
+
+/* ===== v6: discounts, card buttons, stories, readable product details ===== */
+.disc-badge{position:absolute;top:12px;right:12px;z-index:2;background:#1f9d55;color:#fff;font-weight:900;font-size:.78rem;padding:4px 10px;border-radius:999px}
+.save-line{color:#7ddf9a;font-weight:800;font-size:.8rem;margin:-2px 0 8px}
+.card-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.card-btns .add{margin-top:0;padding:10px 6px;font-size:.82rem}
+.more{background:var(--gold);color:#0a0a0c;border:2px solid var(--gold);border-radius:10px;padding:10px 6px;font-weight:800;font-size:.82rem}
+.more:hover{background:var(--gold2)}
+.quick{display:none!important}
+.pd-off{background:#1f9d55;color:#fff;font-weight:900;font-size:.8rem;padding:4px 10px;border-radius:999px;margin-left:8px}
+.pd-save{color:#7ddf9a;font-weight:700;margin:6px 0 4px;font-size:.95rem}
+.pd-price .price{font-size:1.7rem}
+.pd-description p{font-size:1.02rem;line-height:1.75;white-space:pre-wrap;color:var(--text);max-height:none!important;overflow:visible!important}
+.story-rail{grid-auto-columns:minmax(260px,300px)}
+.story-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.story-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.story-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.story-body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.story-body h3{margin:0;font-size:1.05rem}
+.story-body p{margin:0;color:var(--muted);line-height:1.6;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.story-card.full .story-body p{-webkit-line-clamp:unset;display:block;color:var(--text)}
+.story-wa{margin-top:auto;justify-content:center;width:100%}
+.story-rail .story-card{scroll-snap-align:start}

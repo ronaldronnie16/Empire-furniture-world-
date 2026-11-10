@@ -23,6 +23,8 @@ const stars = (r) => {
   return "★".repeat(n) + "☆".repeat(5 - n);
 };
 
+const discPct = (p) => (p.old && p.old > p.price) ? Math.round((p.old - p.price) / p.old * 100) : 0;
+let STORIES = [];
 let PRODUCTS = [];
 let currentSort = "featured";
 let cart = {};
@@ -102,14 +104,11 @@ function cardHTML(p) {
     <article class="card" data-product-id="${id}">
       <div class="imgwrap" onclick="openProduct('${id}')">
         ${p.tag ? `<span class="tag ${tagClass}">${esc(p.tag)}</span>` : ""}
+        ${discPct(p) ? `<span class="disc-badge">-${discPct(p)}%</span>` : ""}
         ${p.img
           ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy"
                 onerror="this.style.display='none'">`
           : `<div class="empty-img">No image</div>`}
-        <button type="button" class="quick"
-          onclick="event.stopPropagation();openProduct('${id}')">
-          👁 Quick View
-        </button>
       </div>
 
       <div class="card-body">
@@ -123,14 +122,16 @@ function cardHTML(p) {
 
         <div class="price-row">
           <span class="price">${fmt(p.price)}</span>
-          ${p.old && p.old > p.price
+          ${discPct(p)
             ? `<span class="old-price">${fmt(p.old)}</span>`
             : ""}
         </div>
+        ${discPct(p) ? `<div class="save-line">You save ${discPct(p)}% · ${fmt(p.old - p.price)}</div>` : ""}
 
-        <button type="button" class="add" onclick="addToCart('${id}')">
-          ＋ Add to Cart
-        </button>
+        <div class="card-btns">
+          <button type="button" class="add" onclick="addToCart('${id}')">＋ Add to Cart</button>
+          <button type="button" class="more" onclick="openProduct('${id}')">View More</button>
+        </div>
       </div>
     </article>`;
 }
@@ -200,6 +201,7 @@ function renderHome() {
     ${railSection("Customer Favourites", "Best Sellers", best)}
     ${railSection("Limited Time", "🔥 Hot Deals", hot)}
     ${railSection("Just Landed", "New Arrivals", fresh)}
+    ${storiesSection()}
 
     <section class="why" id="why">
       <div class="wrap">
@@ -241,6 +243,60 @@ function railSection(kicker, title, items) {
         <div class="rail">${items.map(cardHTML).join("")}</div>
       </div>
     </section>`;
+}
+
+/* ------------------------------------------------------------
+   STORIES
+   ------------------------------------------------------------ */
+
+function storyCard(s, full) {
+  const title = s.title || "Empire Furniture World";
+  return `
+    <article class="story-card ${full ? "full" : ""}">
+      ${s.img ? `<img src="${esc(s.img)}" alt="${esc(title)}" loading="lazy" onerror="this.style.display='none'">` : ""}
+      <div class="story-body">
+        ${s.title ? `<h3>${esc(s.title)}</h3>` : ""}
+        <p>${esc(s.desc)}</p>
+        <button type="button" class="btn wa story-wa" onclick="storyWhatsApp('${esc(s.id)}')">💬 Open more on WhatsApp</button>
+      </div>
+    </article>`;
+}
+
+function storiesSection() {
+  if (!STORIES.length) return "";
+  return `
+    <section id="stories" style="padding-top:0">
+      <div class="wrap">
+        <div class="sec-head">
+          <div><div class="kicker">Latest from us</div><h2>Stories</h2></div>
+          <button class="see-all" onclick="showStories()">All Stories →</button>
+        </div>
+        <div class="rail story-rail">${STORIES.slice(0, 8).map((s) => storyCard(s, false)).join("")}</div>
+      </div>
+    </section>`;
+}
+
+function showStories() {
+  closeMenu();
+  view().innerHTML = `
+    <section>
+      <div class="wrap">
+        <div class="crumb"><a href="#/" onclick="event.preventDefault();goHome()">Home</a><span>/</span><span>Stories</span></div>
+        <div class="sec-head"><div><div class="kicker">Empire Furniture World</div><h2>Stories</h2></div></div>
+        <div class="story-grid">
+          ${STORIES.length ? STORIES.map((s) => storyCard(s, true)).join("") : `<div class="empty-msg"><h3>No stories yet.</h3><p>Check back soon for news and offers.</p></div>`}
+        </div>
+      </div>
+    </section>`;
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function storyWhatsApp(id) {
+  const s = STORIES.find((x) => String(x.id) === String(id));
+  if (!s) return;
+  const link = s.img && /^https?:/i.test(s.img) ? s.img : (s.img ? location.origin + s.img : "");
+  const msg = `Hello Empire Furniture World! I saw your story${s.title ? ` "${s.title}"` : ""} and I'd like to know more.\n\n${s.desc.slice(0, 300)}${link ? `\n\n${link}` : ""}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
 }
 
 /* ------------------------------------------------------------
@@ -393,6 +449,7 @@ function openProduct(id) {
     <div class="pd-grid">
       <div class="pd-img">
         ${p.tag ? `<span class="tag ${tagClass}" style="top:14px;left:14px">${esc(p.tag)}</span>` : ""}
+        ${discPct(p) ? `<span class="disc-badge" style="top:14px;right:60px">-${discPct(p)}%</span>` : ""}
         ${
           p.img
             ? `<img src="${esc(p.img)}" alt="${esc(p.name)}">`
@@ -412,8 +469,9 @@ function openProduct(id) {
 
         <div class="pd-price">
           <span class="price">${fmt(p.price)}</span>
-          ${p.old && p.old > p.price ? `<span class="old-price">${fmt(p.old)}</span>` : ""}
+          ${discPct(p) ? `<span class="old-price">${fmt(p.old)}</span><span class="pd-off">${discPct(p)}% OFF</span>` : ""}
         </div>
+        ${discPct(p) ? `<div class="pd-save">Previous price ${fmt(p.old)} → now ${fmt(p.price)}. You save ${fmt(p.old - p.price)} (${discPct(p)}%).</div>` : ""}
 
        <div class="pd-description">
   <h4>Product Description</h4>
@@ -686,7 +744,9 @@ function closeMenu() {
 function menuGo(dest) {
   closeMenu();
 
-  if (dest === "home") goHome();
+  if (dest === "stories") showStories();
+  else if (dest === "cart") toggleCart(true);
+  else if (dest === "home") goHome();
   else if (dest === "cats") showCatalogue();
   else {
     renderHome();
@@ -827,6 +887,12 @@ async function loadProducts() {
     setProducts([]);
     toast("Catalogue could not be loaded. Please try again.");
   }
+
+  try {
+    const sr = await fetch("/.netlify/functions/stories", { cache: "no-store" });
+    STORIES = sr.ok ? await sr.json() : [];
+    if (!Array.isArray(STORIES)) STORIES = [];
+  } catch { STORIES = []; }
 
   renderHome();
   renderCart();

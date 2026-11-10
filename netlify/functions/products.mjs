@@ -27,6 +27,15 @@ export async function getProduct(id) {
 }
 export async function saveProduct(product) { await store.setJSON(`${PREFIX}${product.id}`,normalizeProduct(product)); }
 export async function deleteProduct(id) { await store.delete(`${PREFIX}${id}`); }
+const CAT_KEY='meta/categories';
+export async function getCategoryNames(){
+  const stored=(await store.get(CAT_KEY,{type:'json'}))||[];
+  const used=(await getAllProducts()).map(x=>x.category);
+  const seen=new Set(),out=[];
+  [...stored,...used].forEach(n=>{n=String(n||'').trim();const k=n.toLowerCase();if(n&&!seen.has(k)){seen.add(k);out.push(n)}});
+  return out.sort((a,b)=>a.localeCompare(b));
+}
+export async function saveCategoryNames(list){await store.setJSON(CAT_KEY,list)}
 export default async (req) => {
   if(req.method!=='GET') return new Response('Method not allowed',{status:405});
   return Response.json(await getAllProducts(),{headers:{'Cache-Control':'no-store'}});

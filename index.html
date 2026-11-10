@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Empire Furniture World </title>
 <meta name="description" content="Empire Furniture World Kampala — sofa sets, beds, wardrobes, centre tables, sideboards & TV stands. Quality furniture at an affordable price.">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -24,6 +24,7 @@
     <nav class="links">
       <a href="#/" onclick="goHome(event)">Home</a>
       <a href="#/" id="navCategories" onclick="goCategories(event)">Categories</a>
+      <a href="#/" onclick="event.preventDefault();showStories()">Stories</a>
       <a href="#why" onclick="goWhy(event)">Why Us</a>
       <a href="#branches" onclick="goBranches(event)">Branches</a>
       <a href="#contact">Contact</a>
@@ -45,6 +46,8 @@
 <div class="mobile-menu" id="mobileMenu">
   <a onclick="menuGo('home')">🏠 Home</a>
   <a onclick="menuGo('cats')">🗂️ Categories</a>
+  <a onclick="menuGo('stories')">📖 Stories</a>
+  <a onclick="menuGo('cart')">🛒 My Cart</a>
   <a onclick="menuGo('why')">💎 Why Us</a>
   <a onclick="menuGo('branches')">📍 Branches</a>
   <a href="#contact" onclick="closeMenu()">📞 Contact</a>
@@ -147,7 +150,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 
 </body>
 </html>

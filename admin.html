@@ -4,80 +4,124 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>EFW Admin</title>
+<title>Empire Furniture World Store Management</title>
 <style>
 :root{--bg:#050507;--panel:#101014;--panel2:#16161c;--line:#292933;--gold:#f0b429;--gold2:#ffd66b;--text:#ece8dc;--muted:#96917f;--danger:#d85d5d}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Segoe UI,system-ui,sans-serif}.wrap{max-width:1100px;margin:auto;padding:28px 20px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:24px}.brand{font-weight:900;letter-spacing:1px}.brand span{display:block;color:var(--gold);font-size:.7rem;letter-spacing:3px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:20px}.login{max-width:430px;margin:10vh auto}.h2{font-size:1.35rem;font-weight:900;margin:0 0 6px}.muted{color:var(--muted)}label{display:block;font-size:.82rem;font-weight:800;margin:15px 0 7px}input,select,textarea{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);outline:none;font:inherit}input:focus,select:focus,textarea:focus{border-color:var(--gold)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.full{grid-column:1/-1}.btn{border:0;border-radius:999px;padding:12px 18px;font-weight:900;cursor:pointer;background:var(--gold);color:#090909}.btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text)}.btn.danger{background:transparent;border:1px solid #693434;color:#ff8d8d}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.msg{margin-top:12px;color:var(--gold2);min-height:20px}.products{display:grid;gap:10px}.product{display:flex;align-items:center;gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#0c0c10}.thumb{width:72px;height:58px;border-radius:9px;object-fit:cover;background:#181820;flex:none}.info{min-width:0;flex:1}.name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:.8rem;color:var(--muted);margin-top:3px}.price{color:var(--gold2);font-weight:900}.empty{padding:25px;text-align:center;color:var(--muted)}.file-note{font-size:.76rem;color:var(--muted);margin-top:6px}.preview{display:none;width:110px;height:80px;object-fit:cover;border-radius:10px;margin-top:10px;border:1px solid var(--line)}.stars-picker{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.star-btn{border:1px solid var(--line);background:var(--panel2);color:#5e5a50;border-radius:10px;padding:7px 9px;font-size:1.2rem;line-height:1;cursor:pointer}.star-btn.active{color:var(--gold);border-color:var(--gold);background:#211a0b}.star-count{font-size:.8rem;color:var(--muted);margin-left:4px}@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.product{align-items:flex-start}.top{align-items:flex-start;flex-direction:column}}
+
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}.tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:11px 20px;font-weight:900;cursor:pointer;font:inherit;font-weight:900}.tab.on{background:var(--gold);color:#090909;border-color:var(--gold)}
+.pane[hidden]{display:none}.chip{display:inline-flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:8px 8px 8px 16px;font-weight:800;margin:0 8px 8px 0}.chip button{border:0;background:#2a1616;color:#ff8d8d;border-radius:999px;width:26px;height:26px;cursor:pointer;font-weight:900}
+.row{display:flex;gap:10px}.row input{flex:1}.disc{color:#7ddf9a;font-weight:800;font-size:.85rem;margin-top:6px;min-height:18px}.editing{border-color:var(--gold)!important}.btn.small{padding:8px 14px;font-size:.82rem}.pbtns{display:flex;gap:8px;flex:none}@media(max-width:700px){.product{flex-wrap:wrap}.pbtns{width:100%}}
 </style>
 </head>
 <body>
-<div id="loginView" class="wrap login"><div class="panel"><div class="brand">EMPIRE<span>FURNITURE WORLD · ADMIN</span></div><h1 class="h2" style="margin-top:28px">Admin Login</h1><p class="muted">This dashboard is separate from the public store.</p><form id="loginForm"><label for="password">Admin password</label><input id="password" type="password" autocomplete="current-password" required><div class="actions"><button class="btn" type="submit">Sign in</button></div><div id="loginMsg" class="msg"></div></form></div></div>
+<div id="loginView" class="wrap login"><div class="panel"><div class="brand">EMPIRE<span>FURNITURE WORLD · STORE MANAGEMENT</span></div><h1 class="h2" style="margin-top:28px">Admin Login</h1><p class="muted">This dashboard is separate from the public store.</p><form id="loginForm"><label for="password">Admin password</label><input id="password" type="password" autocomplete="current-password" required><div class="actions"><button class="btn" type="submit">Sign in</button></div><div id="loginMsg" class="msg"></div></form></div></div>
 
 <div id="adminView" class="wrap" hidden>
-<div class="top"><div class="brand">EMPIRE<span>FURNITURE WORLD · ADMIN</span></div><div class="actions" style="margin:0"><a class="btn secondary" href="/">View Store</a><button class="btn secondary" onclick="logout()">Log out</button></div></div>
-<div class="panel"><h2 class="h2">Add Product</h2><p class="muted">Add as many products as your Netlify storage allows. New products appear on the public website automatically.</p>
-<form id="productForm"><div class="grid">
+<div class="top"><div class="brand">EMPIRE FURNITURE WORLD<span>STORE MANAGEMENT</span></div><div class="actions" style="margin:0"><a class="btn secondary" href="/">View Store</a><button class="btn secondary" onclick="logout()">Log out</button></div></div>
+<div class="tabs"><button class="tab on" data-tab="products">🛋 Products</button><button class="tab" data-tab="stories">📖 Stories</button><button class="tab" data-tab="categories">🗂 Categories</button></div>
+
+<div class="pane" id="pane-products">
+<div class="panel" id="productPanel"><h2 class="h2" id="pTitle">Add Product</h2><p class="muted">Saved products show on the public store immediately.</p>
+<form id="productForm"><input type="hidden" id="pid"><div class="grid">
 <div><label>Product name *</label><input id="name" required placeholder="e.g. L-shaped sofa set"></div>
-<div><label>Category *</label><input id="category" list="categoryList" required placeholder="e.g. Sofa Sets"><datalist id="categoryList"></datalist><div class="file-note">Use any category name. Existing product categories will be suggested automatically.</div></div>
-<div><label>Price (UGX) *</label><input id="price" type="number" min="1" required placeholder="900000"></div>
-<div><label>Old price (optional)</label><input id="old" type="number" min="0" placeholder="1000000"></div>
+<div><label>Category *</label><select id="category" required></select><div class="file-note">Missing one? Add it in the Categories tab — it appears here instantly.</div></div>
+<div><label>New price (UGX) *</label><input id="price" type="number" min="1" required placeholder="900000"></div>
+<div><label>Previous price (for discount)</label><input id="old" type="number" min="0" placeholder="1000000"><div class="disc" id="disc"></div></div>
 <div><label>Tag</label><select id="tag"><option value="">None</option><option>Best Seller</option><option>Hot Deal</option><option>New</option></select></div>
-<div><label>Star rating *</label><input type="hidden" id="rating" value="5"><div id="ratingPicker" class="stars-picker" role="radiogroup" aria-label="Product star rating"></div><div id="ratingCount" class="star-count">5 / 5 stars</div></div>
-<div><label>Product photo from your phone/computer</label><input id="imageFile" type="file" accept="image/*"><div class="file-note">Choose an image file. It will be uploaded to the site automatically. Maximum 4 MB per image.</div><img id="preview" class="preview" alt="Preview"></div>
-<div class="full"><label>Or image path / URL (optional)</label><input id="img" placeholder="assets/sofa.jpg or https://..."></div>
-<div class="full"><label>Description</label><textarea id="desc" rows="3" placeholder="Short product description..."></textarea></div>
-</div><div class="actions"><button class="btn" type="submit">＋ Add Product</button><button class="btn secondary" type="reset">Clear</button></div><div id="formMsg" class="msg"></div></form></div>
-<div class="panel"><h2 class="h2">Products <span id="count" class="muted" style="font-size:.85rem"></span></h2><p class="muted">There is no fixed product-count limit in the admin code; each product is stored separately.</p><div id="products" class="products"></div></div>
+<div><label>Star rating *</label><input type="hidden" id="rating" value="5"><div id="ratingPicker" class="stars-picker"></div><div id="ratingCount" class="star-count">5 / 5 stars</div></div>
+<div><label>Photo from phone/computer</label><input id="imageFile" type="file" accept="image/*"><div class="file-note">Max 4 MB. When editing, leave empty to keep the current photo.</div><img id="preview" class="preview" alt="Preview"></div>
+<div><label>Or image link</label><input id="img" placeholder="https://..."></div>
+<div class="full"><label>Description</label><textarea id="desc" rows="5" placeholder="Size, material, colours, what is included…"></textarea></div>
+</div><div class="actions"><button class="btn" type="submit" id="pSave">＋ Add Product</button><button class="btn secondary" type="button" id="pCancel" hidden>Cancel edit</button></div><div id="formMsg" class="msg"></div></form></div>
+<div class="panel"><h2 class="h2">Products <span id="count" class="muted" style="font-size:.85rem"></span></h2><div id="products" class="products"></div></div>
+</div>
+
+<div class="pane" id="pane-stories" hidden>
+<div class="panel" id="storyPanel"><h2 class="h2" id="sTitle">Add Story</h2><p class="muted">Stories appear on the public store right after you save. Customers get a button to open more on WhatsApp.</p>
+<form id="storyForm"><input type="hidden" id="sid"><div class="grid">
+<div class="full"><label>Headline (optional)</label><input id="stitle" placeholder="e.g. New arrivals this week"></div>
+<div><label>Image from phone/computer</label><input id="sFile" type="file" accept="image/*"><div class="file-note">Max 4 MB. When editing, leave empty to keep the current image.</div><img id="sPreview" class="preview" alt="Preview"></div>
+<div><label>Or image link</label><input id="sImg" placeholder="https://..."></div>
+<div class="full"><label>Description</label><textarea id="sDesc" rows="4" placeholder="Tell the story…"></textarea></div>
+</div><div class="actions"><button class="btn" type="submit" id="sSave">＋ Post Story</button><button class="btn secondary" type="button" id="sCancel" hidden>Cancel edit</button></div><div id="storyMsg" class="msg"></div></form></div>
+<div class="panel"><h2 class="h2">Stories <span id="sCount" class="muted" style="font-size:.85rem"></span></h2><div id="stories" class="products"></div></div>
+</div>
+
+<div class="pane" id="pane-categories" hidden>
+<div class="panel"><h2 class="h2">Categories</h2><p class="muted">Add a category here and it is available straight away when uploading products.</p>
+<form id="catForm" class="row" style="margin-top:14px"><input id="catName" placeholder="e.g. Dining Sets" required maxlength="60"><button class="btn" type="submit">＋ Add</button></form><div id="catMsg" class="msg"></div><div id="cats" style="margin-top:10px"></div></div>
+</div>
 </div>
 <script>
-const $=id=>document.getElementById(id);const API='/.netlify/functions/admin';const PUBLIC_SCRIPT='/script.js';
-function msg(id,text){$(id).textContent=text}
-async function api(url,options={}){const r=await fetch(url,{credentials:'include',...options});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||'Request failed');return data}
-async function check(){try{await api(API);showAdmin();loadProducts()}catch{showLogin()}}
+const $=id=>document.getElementById(id);const API='/.netlify/functions/admin';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const msg=(id,t)=>{$(id).textContent=t};
+async function api(url,o={}){const r=await fetch(url,{credentials:'include',...o});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'Request failed');return d}
+const R=(res,extra='')=>`${API}?resource=${res}${extra}`;
+const jpost=(url,body)=>api(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+let PRODUCTS=[],STORIES=[];
+async function check(){try{await api(API);showAdmin();loadAll()}catch{showLogin()}}
 function showLogin(){$('loginView').hidden=false;$('adminView').hidden=true}function showAdmin(){$('loginView').hidden=true;$('adminView').hidden=false}
-$('loginForm').onsubmit=async e=>{e.preventDefault();msg('loginMsg','Signing in…');try{await api(API+'?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});$('password').value='';showAdmin();loadProducts()}catch(err){msg('loginMsg',err.message)}};
-$('imageFile').onchange=()=>{const f=$('imageFile').files[0];const p=$('preview');if(!f){p.style.display='none';return}p.src=URL.createObjectURL(f);p.style.display='block'};
-$('productForm').onsubmit=async e=>{e.preventDefault();msg('formMsg','Uploading product…');const fd=new FormData();fd.append('name',$('name').value);fd.append('category',$('category').value);fd.append('price',$('price').value);fd.append('old',$('old').value);fd.append('tag',$('tag').value);fd.append('rating',$('rating').value);fd.append('reviews','0');fd.append('img',$('img').value);fd.append('desc',$('desc').value);const file=$('imageFile').files[0];if(file)fd.append('imageFile',file);try{await api(API,{method:'POST',body:fd});e.target.reset();$('preview').style.display='none';msg('formMsg','Product added successfully.');loadProducts()}catch(err){msg('formMsg',err.message)}};
-async function loadProducts(){
-  try{
-    const items=await api(API);
-    $('count').textContent='('+items.length+')';
-    $('products').innerHTML=items.length?items.map(p=>{
-      const r=Math.max(0,Math.min(5,Number(p.rating)||0));
-      return `<div class="product"><img class="thumb" src="${escapeAttr(p.img||'')}" onerror="this.style.visibility='hidden'" alt="><div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta">${escapeHtml(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span> · <span aria-label="${r} stars">${'★'.repeat(r)}${'☆'.repeat(5-r)}</span></div></div><button type="button" class="btn danger remove-product" data-id="${escapeAttr(String(p.id))}" data-name="${escapeAttr(p.name||'this product')}">Remove</button></div>`;
-    }).join(''):'<div class="empty">No products yet.</div>';
-    document.querySelectorAll('.remove-product').forEach(btn=>btn.addEventListener('click',()=>removeProduct(btn.dataset.id,btn.dataset.name)));
-  }catch(err){$('products').innerHTML='<div class="empty">'+escapeHtml(err.message)+'</div>'}
-}
-async function removeProduct(id,name){if(!confirm('Remove '+name+' from the catalogue?'))return;try{await api(API+'?id='+id,{method:'DELETE'});loadProducts()}catch(err){alert(err.message)}}
+const loadAll=()=>{loadCategories();loadProducts();loadStories()};
+$('loginForm').onsubmit=async e=>{e.preventDefault();msg('loginMsg','Signing in…');try{await jpost(API+'?action=login',{password:$('password').value});$('password').value='';msg('loginMsg','');showAdmin();loadAll()}catch(err){msg('loginMsg',err.message)}};
 async function logout(){await api(API+'?action=logout',{method:'POST'}).catch(()=>{});showLogin()}
-function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}function escapeAttr(s){return escapeHtml(s).replace(/`/g,'&#96;')}
-function setRating(value){
-  const n=Math.max(1,Math.min(5,Number(value)||5));
-  $('rating').value=String(n);
-  $('ratingCount').textContent=n+' / 5 stars';
-  document.querySelectorAll('#ratingPicker .star-btn').forEach(btn=>{
-    const v=Number(btn.dataset.rating);
-    btn.classList.toggle('active',v<=n);
-    btn.setAttribute('aria-checked',v===n?'true':'false');
-  });
-}
-function buildRatingPicker(){
-  $('ratingPicker').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="star-btn" data-rating="${n}" role="radio" aria-label="${n} star${n>1?'s':''}" onclick="setRating(${n})">★</button>`).join('');
-  setRating(5);
-}
-async function loadCategories(){
-  try{
-    const products=await api(API);
-    const names=[...new Set(products.map(p=>String(p.category||'').trim()).filter(Boolean))];
-    $('categoryList').innerHTML=names.map(c=>`<option value="${escapeAttr(c)}"></option>`).join('');
-  }catch(err){
-    console.warn('Could not load category suggestions:',err);
-  }
-}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));['products','stories','categories'].forEach(n=>$('pane-'+n).hidden=n!==t.dataset.tab)});
+function preview(fileEl,imgEl){fileEl.onchange=()=>{const f=fileEl.files[0];if(!f){imgEl.style.display='none';return}imgEl.src=URL.createObjectURL(f);imgEl.style.display='block'}}
+preview($('imageFile'),$('preview'));preview($('sFile'),$('sPreview'));
+const thumb=src=>`<img class="thumb" src="${esc(src||'')}" onerror="this.style.visibility='hidden'" alt="">`;
 
-$('productForm').addEventListener('reset',()=>setTimeout(setRating,0,5));
-buildRatingPicker();
+/* ---------- categories ---------- */
+async function loadCategories(){
+  let list=[];try{list=await api(R('categories'))}catch(e){msg('catMsg',e.message)}
+  const cur=$('category').value;
+  $('category').innerHTML=list.length?'<option value="">Select category…</option>'+list.map(c=>`<option>${esc(c)}</option>`).join(''):'<option value="">Add a category first</option>';
+  if(list.includes(cur))$('category').value=cur;
+  $('cats').innerHTML=list.length?list.map(c=>`<span class="chip">${esc(c)}<button type="button" data-c="${esc(c)}" title="Delete">✕</button></span>`).join(''):'<div class="empty">No categories yet.</div>';
+  $('cats').querySelectorAll('button').forEach(b=>b.onclick=async()=>{if(!confirm('Delete category "'+b.dataset.c+'"?'))return;try{await api(R('categories','&name='+encodeURIComponent(b.dataset.c)),{method:'DELETE'});msg('catMsg','Category deleted.');loadCategories()}catch(e){msg('catMsg',e.message)}});
+}
+$('catForm').onsubmit=async e=>{e.preventDefault();try{await jpost(R('categories'),{name:$('catName').value});$('catName').value='';msg('catMsg','Category added — it is now available in the product form.');loadCategories()}catch(err){msg('catMsg',err.message)}};
+
+/* ---------- products ---------- */
+function discText(){const p=+$('price').value,o=+$('old').value;$('disc').textContent=o>p&&p>0?`Customers will see ${Math.round((o-p)/o*100)}% OFF (saves UGX ${(o-p).toLocaleString('en-UG')})`:(o&&p&&o<=p?'Previous price must be higher than the new price.':'')}
+$('price').oninput=$('old').oninput=discText;
+function resetProduct(){$('productForm').reset();$('pid').value='';setRating(5);$('preview').style.display='none';$('pTitle').textContent='Add Product';$('pSave').textContent='＋ Add Product';$('pCancel').hidden=true;$('productPanel').classList.remove('editing');discText()}
+$('pCancel').onclick=()=>{resetProduct();msg('formMsg','')};
+$('productForm').onsubmit=async e=>{e.preventDefault();if(!$('category').value){msg('formMsg','Choose a category (add one in the Categories tab).');return}msg('formMsg','Saving…');
+  const fd=new FormData();['pid:id','name','category','price','old','tag','rating','img','desc'].forEach(k=>{const[a,b]=k.split(':');fd.append(b||a,$(a).value)});const f=$('imageFile').files[0];if(f)fd.append('imageFile',f);
+  try{const editing=!!$('pid').value;await api(R('products'),{method:'POST',body:fd});resetProduct();msg('formMsg',editing?'Product updated.':'Product added successfully.');loadAll()}catch(err){msg('formMsg',err.message)}};
+async function loadProducts(){
+  try{PRODUCTS=await api(R('products'));$('count').textContent='('+PRODUCTS.length+')';
+  $('products').innerHTML=PRODUCTS.length?PRODUCTS.map(p=>{const r=Math.round(p.rating)||0;const d=p.old>p.price?` · <b style="color:#7ddf9a">${Math.round((p.old-p.price)/p.old*100)}% off</b>`:'';
+    return `<div class="product">${thumb(p.img)}<div class="info"><div class="name">${esc(p.name)}</div><div class="meta">${esc(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span>${d} · ${'★'.repeat(r)}${'☆'.repeat(5-r)}</div></div><div class="pbtns"><button class="btn secondary small" data-edit="${esc(p.id)}">Edit</button><button class="btn danger small" data-del="${esc(p.id)}">Delete</button></div></div>`}).join(''):'<div class="empty">No products yet.</div>';
+  $('products').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
+  $('products').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delItem('products',b.dataset.del,PRODUCTS,loadProducts));
+  }catch(err){$('products').innerHTML='<div class="empty">'+esc(err.message)+'</div>'}
+}
+function editProduct(id){const p=PRODUCTS.find(x=>String(x.id)===id);if(!p)return;
+  $('pid').value=p.id;$('name').value=p.name;$('category').value=p.category;$('price').value=p.price;$('old').value=p.old||'';$('tag').value=p.tag||'';$('desc').value=p.desc||'';$('img').value='';setRating(p.rating);
+  if(p.img){$('preview').src=p.img;$('preview').style.display='block'}
+  $('pTitle').textContent='Edit Product';$('pSave').textContent='✔ Save Changes';$('pCancel').hidden=false;$('productPanel').classList.add('editing');discText();$('productPanel').scrollIntoView({behavior:'smooth'})}
+async function delItem(res,id,list,reload){const it=list.find(x=>String(x.id)===id);if(!confirm('Delete "'+(it?.name||it?.title||'this item')+'"? This cannot be undone.'))return;try{await api(R(res,'&id='+encodeURIComponent(id)),{method:'DELETE'});reload();loadCategories()}catch(e){alert(e.message)}}
+
+/* ---------- stories ---------- */
+function resetStory(){$('storyForm').reset();$('sid').value='';$('sPreview').style.display='none';$('sTitle').textContent='Add Story';$('sSave').textContent='＋ Post Story';$('sCancel').hidden=true;$('storyPanel').classList.remove('editing')}
+$('sCancel').onclick=()=>{resetStory();msg('storyMsg','')};
+$('storyForm').onsubmit=async e=>{e.preventDefault();msg('storyMsg','Saving…');const fd=new FormData();fd.append('id',$('sid').value);fd.append('title',$('stitle').value);fd.append('desc',$('sDesc').value);fd.append('img',$('sImg').value);const f=$('sFile').files[0];if(f)fd.append('imageFile',f);
+  try{const editing=!!$('sid').value;await api(R('stories'),{method:'POST',body:fd});resetStory();msg('storyMsg',editing?'Story updated.':'Story is now live on the store.');loadStories()}catch(err){msg('storyMsg',err.message)}};
+async function loadStories(){
+  try{STORIES=await api(R('stories'));$('sCount').textContent='('+STORIES.length+')';
+  $('stories').innerHTML=STORIES.length?STORIES.map(s=>`<div class="product">${thumb(s.img)}<div class="info"><div class="name">${esc(s.title||s.desc.slice(0,50)||'Story')}</div><div class="meta">${esc(s.desc.slice(0,90))}</div></div><div class="pbtns"><button class="btn secondary small" data-edit="${esc(s.id)}">Edit</button><button class="btn danger small" data-del="${esc(s.id)}">Delete</button></div></div>`).join(''):'<div class="empty">No stories yet.</div>';
+  $('stories').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editStory(b.dataset.edit));
+  $('stories').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delItem('stories',b.dataset.del,STORIES,loadStories));
+  }catch(err){$('stories').innerHTML='<div class="empty">'+esc(err.message)+'</div>'}
+}
+function editStory(id){const s=STORIES.find(x=>x.id===id);if(!s)return;$('sid').value=s.id;$('stitle').value=s.title;$('sDesc').value=s.desc;$('sImg').value='';
+  if(s.img){$('sPreview').src=s.img;$('sPreview').style.display='block'}
+  $('sTitle').textContent='Edit Story';$('sSave').textContent='✔ Save Changes';$('sCancel').hidden=false;$('storyPanel').classList.add('editing');$('storyPanel').scrollIntoView({behavior:'smooth'})}
+
+/* ---------- rating ---------- */
+function setRating(v){const n=Math.max(1,Math.min(5,Math.round(Number(v))||5));$('rating').value=n;$('ratingCount').textContent=n+' / 5 stars';document.querySelectorAll('#ratingPicker .star-btn').forEach(b=>b.classList.toggle('active',+b.dataset.rating<=n))}
+$('ratingPicker').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="star-btn" data-rating="${n}" aria-label="${n} stars" onclick="setRating(${n})">★</button>`).join('');setRating(5);
 check();
-loadCategories();
 </script></body></html>
