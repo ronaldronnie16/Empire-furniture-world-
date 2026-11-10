@@ -115,18 +115,13 @@ function cardHTML(p) {
         <span class="cat">${esc(p.category)}</span>
         <h3 onclick="openProduct('${id}')">${esc(p.name)}</h3>
 
-        <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">
-  ${stars(p.rating)}
- <span>(${safeRating(p.rating)})</span>
-</div>
-
         <div class="price-row">
           <span class="price">${fmt(p.price)}</span>
           ${discPct(p)
             ? `<span class="old-price">${fmt(p.old)}</span>`
             : ""}
         </div>
-        ${discPct(p) ? `<div class="save-line">You save ${discPct(p)}% · ${fmt(p.old - p.price)}</div>` : ""}
+        ${discPct(p) ? `<div class="save-line">Save ${discPct(p)}% - ${fmt(p.old - p.price)}</div>` : ""}
 
         <div class="card-btns">
           <button type="button" class="add" onclick="addToCart('${id}')">＋ Add to Cart</button>
@@ -172,6 +167,7 @@ function renderHome() {
             <div class="badge">✦ <b>High Quality</b> &amp; Durable</div>
             <div class="badge">✦ <b>Custom Designs</b> Available</div>
             <div class="badge">✦ <b>Reliable Delivery</b></div>
+            <div class="badge">✦ <b>24/7</b> Open for Orders</div>
           </div>
         </div>
         <div class="hero-img">
@@ -211,6 +207,7 @@ function renderHome() {
           <div class="why-card"><div class="ico">✏️</div><h3>Custom Designs</h3><p>Tailored to your style &amp; space — we build to your exact measurements.</p></div>
           <div class="why-card"><div class="ico">💰</div><h3>Affordable Prices</h3><p>Great value for your money with flexible payment options.</p></div>
           <div class="why-card"><div class="ico">🚚</div><h3>Reliable Delivery</h3><p>Safe &amp; on-time delivery to your doorstep, anywhere in Uganda.</p></div>
+          <div class="why-card"><div class="ico">🕐</div><h3>24/7 Open for Orders</h3><p>Anytime, anywhere you can order for whatever piece of furniture you need.</p></div>
           <div class="why-card"><div class="ico">🎧</div><h3>Excellent Customer Service</h3><p>Your satisfaction is our priority — before and after the sale.</p></div>
         </div>
       </div>
@@ -249,17 +246,23 @@ function railSection(kicker, title, items) {
    STORIES
    ------------------------------------------------------------ */
 
-function storyCard(s, full) {
-  const title = s.title || "Empire Furniture World";
+const LOGO = "assets/logo.png";
+const storyTitle = (s) => s.title || "Empire Furniture World";
+function timeAgo(t) {
+  const m = Math.max(1, Math.round((Date.now() - (t || Date.now())) / 60000));
+  if (m < 60) return m + "m";
+  if (m < 1440) return Math.round(m / 60) + "h";
+  return Math.round(m / 1440) + "d";
+}
+
+function storyTile(s, i) {
   return `
-    <article class="story-card ${full ? "full" : ""}">
-      ${s.img ? `<img src="${esc(s.img)}" alt="${esc(title)}" loading="lazy" onerror="this.style.display='none'">` : ""}
-      <div class="story-body">
-        ${s.title ? `<h3>${esc(s.title)}</h3>` : ""}
-        <p>${esc(s.desc)}</p>
-        <button type="button" class="btn wa story-wa" onclick="storyWhatsApp('${esc(s.id)}')">💬 Open more on WhatsApp</button>
-      </div>
-    </article>`;
+    <div class="story-tile" onclick="openStory(${i})" role="button" tabindex="0">
+      ${s.img ? `<img src="${esc(s.img)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ""}
+      <img class="st-avatar" src="${LOGO}" alt="">
+      <div class="st-cap">${esc(s.title || s.desc.slice(0, 40))}</div>
+      <span class="st-age">${timeAgo(s.created)}</span>
+    </div>`;
 }
 
 function storiesSection() {
@@ -271,7 +274,7 @@ function storiesSection() {
           <div><div class="kicker">Latest from us</div><h2>Stories</h2></div>
           <button class="see-all" onclick="showStories()">All Stories →</button>
         </div>
-        <div class="rail story-rail">${STORIES.slice(0, 8).map((s) => storyCard(s, false)).join("")}</div>
+        <div class="story-strip">${STORIES.slice(0, 12).map(storyTile).join("")}</div>
       </div>
     </section>`;
 }
@@ -283,12 +286,83 @@ function showStories() {
       <div class="wrap">
         <div class="crumb"><a href="#/" onclick="event.preventDefault();goHome()">Home</a><span>/</span><span>Stories</span></div>
         <div class="sec-head"><div><div class="kicker">Empire Furniture World</div><h2>Stories</h2></div></div>
-        <div class="story-grid">
-          ${STORIES.length ? STORIES.map((s) => storyCard(s, true)).join("") : `<div class="empty-msg"><h3>No stories yet.</h3><p>Check back soon for news and offers.</p></div>`}
-        </div>
+        ${STORIES.length ? `<div class="story-grid">${STORIES.map(storyTile).join("")}</div>` : `<div class="empty-msg"><h3>No stories yet.</h3><p>Check back soon for news and offers.</p></div>`}
       </div>
     </section>`;
   window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+/* ---- full-screen story viewer (progress bars, auto-advance, hold to pause) ---- */
+const SV = { i: 0, t: 0, tick: null, paused: false, DUR: 6000 };
+
+function ensureViewer() {
+  if ($("storyViewer")) return;
+  const d = document.createElement("div");
+  d.id = "storyViewer";
+  d.className = "story-viewer";
+  d.innerHTML = `
+    <div class="sv-box" id="svBox">
+      <div class="sv-bars" id="svBars"></div>
+      <div class="sv-head">
+        <img src="${LOGO}" alt=""><div><b id="svTitle"></b><small id="svAge"></small></div>
+        <button type="button" class="sv-x" onclick="closeStory()" aria-label="Close">✕</button>
+      </div>
+      <div class="sv-media" id="svMedia"></div>
+      <div class="sv-tap l" onclick="prevStory()"></div>
+      <div class="sv-tap r" onclick="nextStory()"></div>
+      <div class="sv-foot"><p id="svDesc"></p><button type="button" class="btn wa" id="svWa">💬 Open more on WhatsApp</button></div>
+    </div>`;
+  document.body.appendChild(d);
+  const box = $("svBox");
+  const hold = (v) => () => { SV.paused = v; box.classList.toggle("paused", v); };
+  box.addEventListener("pointerdown", (e) => { if (!e.target.closest("button")) hold(true)(); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => box.addEventListener(ev, hold(false)));
+  d.addEventListener("click", (e) => { if (e.target === d) closeStory(); });
+  document.addEventListener("keydown", (e) => {
+    if (!d.classList.contains("open")) return;
+    if (e.key === "ArrowRight") nextStory();
+    if (e.key === "ArrowLeft") prevStory();
+    if (e.key === "Escape") closeStory();
+  });
+}
+
+function openStory(i) {
+  if (!STORIES.length) return;
+  ensureViewer();
+  SV.i = Math.max(0, Math.min(i, STORIES.length - 1));
+  $("storyViewer").classList.add("open");
+  document.body.classList.add("modal-open");
+  showStory();
+}
+
+function showStory() {
+  const s = STORIES[SV.i];
+  clearInterval(SV.tick);
+  SV.t = 0;
+  SV.paused = false;
+  $("svBars").innerHTML = STORIES.map((_, k) => `<i><b style="width:${k < SV.i ? 100 : 0}%"></b></i>`).join("");
+  $("svTitle").textContent = storyTitle(s);
+  $("svAge").textContent = timeAgo(s.created) + " ago";
+  $("svMedia").innerHTML = s.img
+    ? `<img class="kb" src="${esc(s.img)}" alt="" onerror="this.style.display='none'">`
+    : `<div class="sv-textonly"></div>`;
+  $("svDesc").textContent = s.desc;
+  $("svWa").onclick = () => storyWhatsApp(s.id);
+  const bar = $("svBars").children[SV.i].firstChild;
+  SV.tick = setInterval(() => {
+    if (SV.paused) return;
+    SV.t += 50;
+    bar.style.width = Math.min(100, (SV.t / SV.DUR) * 100) + "%";
+    if (SV.t >= SV.DUR) nextStory();
+  }, 50);
+}
+
+function nextStory() { SV.i + 1 >= STORIES.length ? closeStory() : (SV.i++, showStory()); }
+function prevStory() { SV.i > 0 ? (SV.i--, showStory()) : showStory(); }
+function closeStory() {
+  clearInterval(SV.tick);
+  $("storyViewer")?.classList.remove("open");
+  document.body.classList.remove("modal-open");
 }
 
 function storyWhatsApp(id) {
@@ -297,6 +371,18 @@ function storyWhatsApp(id) {
   const link = s.img && /^https?:/i.test(s.img) ? s.img : (s.img ? location.origin + s.img : "");
   const msg = `Hello Empire Furniture World! I saw your story${s.title ? ` "${s.title}"` : ""} and I'd like to know more.\n\n${s.desc.slice(0, 300)}${link ? `\n\n${link}` : ""}`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+}
+
+/* ---- light / dark theme ---- */
+function applyTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  const b = $("themeBtn");
+  if (b) b.textContent = t === "light" ? "🌙" : "☀️";
+}
+function toggleTheme() {
+  const t = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+  try { localStorage.setItem("efw_theme", t); } catch {}
+  applyTheme(t);
 }
 
 /* ------------------------------------------------------------
@@ -462,16 +548,11 @@ function openProduct(id) {
         <span class="cat">${esc(p.category)}</span>
         <h2>${esc(p.name)}</h2>
 
-        <div class="stars" aria-label="${safeRating(p.rating)} out of 5 stars">
-  ${stars(p.rating)}
-  <span>(${safeRating(p.rating)})</span>
-</div>
-
         <div class="pd-price">
           <span class="price">${fmt(p.price)}</span>
           ${discPct(p) ? `<span class="old-price">${fmt(p.old)}</span><span class="pd-off">${discPct(p)}% OFF</span>` : ""}
         </div>
-        ${discPct(p) ? `<div class="pd-save">Previous price ${fmt(p.old)} → now ${fmt(p.price)}. You save ${fmt(p.old - p.price)} (${discPct(p)}%).</div>` : ""}
+        ${discPct(p) ? `<div class="pd-save">Save ${discPct(p)}% - ${fmt(p.old - p.price)}</div>` : ""}
 
        <div class="pd-description">
   <h4>Product Description</h4>
@@ -904,6 +985,9 @@ async function loadProducts() {
    ------------------------------------------------------------ */
 
 function startStore() {
+  let th = "dark";
+  try { th = localStorage.getItem("efw_theme") || "dark"; } catch {}
+  applyTheme(th);
   setupSearch();
   setupGlobalEvents();
   renderHome();

@@ -29,7 +29,6 @@
 <div><label>New price (UGX) *</label><input id="price" type="number" min="1" required placeholder="900000"></div>
 <div><label>Previous price (for discount)</label><input id="old" type="number" min="0" placeholder="1000000"><div class="disc" id="disc"></div></div>
 <div><label>Tag</label><select id="tag"><option value="">None</option><option>Best Seller</option><option>Hot Deal</option><option>New</option></select></div>
-<div><label>Star rating *</label><input type="hidden" id="rating" value="5"><div id="ratingPicker" class="stars-picker"></div><div id="ratingCount" class="star-count">5 / 5 stars</div></div>
 <div><label>Photo from phone/computer</label><input id="imageFile" type="file" accept="image/*"><div class="file-note">Max 4 MB. When editing, leave empty to keep the current photo.</div><img id="preview" class="preview" alt="Preview"></div>
 <div><label>Or image link</label><input id="img" placeholder="https://..."></div>
 <div class="full"><label>Description</label><textarea id="desc" rows="5" placeholder="Size, material, colours, what is included…"></textarea></div>
@@ -85,21 +84,21 @@ $('catForm').onsubmit=async e=>{e.preventDefault();try{await jpost(R('categories
 /* ---------- products ---------- */
 function discText(){const p=+$('price').value,o=+$('old').value;$('disc').textContent=o>p&&p>0?`Customers will see ${Math.round((o-p)/o*100)}% OFF (saves UGX ${(o-p).toLocaleString('en-UG')})`:(o&&p&&o<=p?'Previous price must be higher than the new price.':'')}
 $('price').oninput=$('old').oninput=discText;
-function resetProduct(){$('productForm').reset();$('pid').value='';setRating(5);$('preview').style.display='none';$('pTitle').textContent='Add Product';$('pSave').textContent='＋ Add Product';$('pCancel').hidden=true;$('productPanel').classList.remove('editing');discText()}
+function resetProduct(){$('productForm').reset();$('pid').value='';$('preview').style.display='none';$('pTitle').textContent='Add Product';$('pSave').textContent='＋ Add Product';$('pCancel').hidden=true;$('productPanel').classList.remove('editing');discText()}
 $('pCancel').onclick=()=>{resetProduct();msg('formMsg','')};
 $('productForm').onsubmit=async e=>{e.preventDefault();if(!$('category').value){msg('formMsg','Choose a category (add one in the Categories tab).');return}msg('formMsg','Saving…');
-  const fd=new FormData();['pid:id','name','category','price','old','tag','rating','img','desc'].forEach(k=>{const[a,b]=k.split(':');fd.append(b||a,$(a).value)});const f=$('imageFile').files[0];if(f)fd.append('imageFile',f);
+  const fd=new FormData();['pid:id','name','category','price','old','tag','img','desc'].forEach(k=>{const[a,b]=k.split(':');fd.append(b||a,$(a).value)});const f=$('imageFile').files[0];if(f)fd.append('imageFile',f);
   try{const editing=!!$('pid').value;await api(R('products'),{method:'POST',body:fd});resetProduct();msg('formMsg',editing?'Product updated.':'Product added successfully.');loadAll()}catch(err){msg('formMsg',err.message)}};
 async function loadProducts(){
   try{PRODUCTS=await api(R('products'));$('count').textContent='('+PRODUCTS.length+')';
-  $('products').innerHTML=PRODUCTS.length?PRODUCTS.map(p=>{const r=Math.round(p.rating)||0;const d=p.old>p.price?` · <b style="color:#7ddf9a">${Math.round((p.old-p.price)/p.old*100)}% off</b>`:'';
-    return `<div class="product">${thumb(p.img)}<div class="info"><div class="name">${esc(p.name)}</div><div class="meta">${esc(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span>${d} · ${'★'.repeat(r)}${'☆'.repeat(5-r)}</div></div><div class="pbtns"><button class="btn secondary small" data-edit="${esc(p.id)}">Edit</button><button class="btn danger small" data-del="${esc(p.id)}">Delete</button></div></div>`}).join(''):'<div class="empty">No products yet.</div>';
+  $('products').innerHTML=PRODUCTS.length?PRODUCTS.map(p=>{const d=p.old>p.price?` · <b style="color:#7ddf9a">${Math.round((p.old-p.price)/p.old*100)}% off</b>`:'';
+    return `<div class="product">${thumb(p.img)}<div class="info"><div class="name">${esc(p.name)}</div><div class="meta">${esc(p.category)} · <span class="price">UGX ${Number(p.price).toLocaleString('en-UG')}</span>${d}</div></div><div class="pbtns"><button class="btn secondary small" data-edit="${esc(p.id)}">Edit</button><button class="btn danger small" data-del="${esc(p.id)}">Delete</button></div></div>`}).join(''):'<div class="empty">No products yet.</div>';
   $('products').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
   $('products').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delItem('products',b.dataset.del,PRODUCTS,loadProducts));
   }catch(err){$('products').innerHTML='<div class="empty">'+esc(err.message)+'</div>'}
 }
 function editProduct(id){const p=PRODUCTS.find(x=>String(x.id)===id);if(!p)return;
-  $('pid').value=p.id;$('name').value=p.name;$('category').value=p.category;$('price').value=p.price;$('old').value=p.old||'';$('tag').value=p.tag||'';$('desc').value=p.desc||'';$('img').value='';setRating(p.rating);
+  $('pid').value=p.id;$('name').value=p.name;$('category').value=p.category;$('price').value=p.price;$('old').value=p.old||'';$('tag').value=p.tag||'';$('desc').value=p.desc||'';$('img').value='';
   if(p.img){$('preview').src=p.img;$('preview').style.display='block'}
   $('pTitle').textContent='Edit Product';$('pSave').textContent='✔ Save Changes';$('pCancel').hidden=false;$('productPanel').classList.add('editing');discText();$('productPanel').scrollIntoView({behavior:'smooth'})}
 async function delItem(res,id,list,reload){const it=list.find(x=>String(x.id)===id);if(!confirm('Delete "'+(it?.name||it?.title||'this item')+'"? This cannot be undone.'))return;try{await api(R(res,'&id='+encodeURIComponent(id)),{method:'DELETE'});reload();loadCategories()}catch(e){alert(e.message)}}
@@ -120,8 +119,5 @@ function editStory(id){const s=STORIES.find(x=>x.id===id);if(!s)return;$('sid').
   if(s.img){$('sPreview').src=s.img;$('sPreview').style.display='block'}
   $('sTitle').textContent='Edit Story';$('sSave').textContent='✔ Save Changes';$('sCancel').hidden=false;$('storyPanel').classList.add('editing');$('storyPanel').scrollIntoView({behavior:'smooth'})}
 
-/* ---------- rating ---------- */
-function setRating(v){const n=Math.max(1,Math.min(5,Math.round(Number(v))||5));$('rating').value=n;$('ratingCount').textContent=n+' / 5 stars';document.querySelectorAll('#ratingPicker .star-btn').forEach(b=>b.classList.toggle('active',+b.dataset.rating<=n))}
-$('ratingPicker').innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="star-btn" data-rating="${n}" aria-label="${n} stars" onclick="setRating(${n})">★</button>`).join('');setRating(5);
 check();
 </script></body></html>

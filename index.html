@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("efw_theme")||"dark")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Empire Furniture World </title>
 <meta name="description" content="Empire Furniture World Kampala — sofa sets, beds, wardrobes, centre tables, sideboards & TV stands. Quality furniture at an affordable price.">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 
@@ -33,6 +34,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e8e4d8" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input type="text" id="search" placeholder="Search furniture…" aria-label="Search products">
     </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Switch light or dark theme">☀️</button>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -150,7 +152,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
 
 </body>
 </html>
