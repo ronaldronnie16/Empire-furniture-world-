@@ -525,23 +525,20 @@ function openProduct(id) {
   const p = byId(id);
   if (!p || !$("productModal") || !$("productBox")) return;
 
-  const related = inCat(p.category)
-    .filter((x) => x.id !== p.id)
-    .slice(0, 6);
-
+  const related = inCat(p.category).filter((x) => x.id !== p.id).slice(0, 6);
   const tagClass = p.tag === "Hot Deal" ? "ember" : p.tag === "New" ? "ghost" : "gold";
+  const pct = discPct(p);
 
   $("productBox").innerHTML = `
+    <button type="button" class="close-x pd-close" onclick="closeProduct()" aria-label="Close">✕</button>
+
     <div class="pd-grid">
       <div class="pd-img">
         ${p.tag ? `<span class="tag ${tagClass}" style="top:14px;left:14px">${esc(p.tag)}</span>` : ""}
-        ${discPct(p) ? `<span class="disc-badge" style="top:14px;right:60px">-${discPct(p)}%</span>` : ""}
-        ${
-          p.img
-            ? `<img src="${esc(p.img)}" alt="${esc(p.name)}">`
-            : `<div class="empty-img">No image</div>`
-        }
-        <button type="button" class="close-x pd-close" onclick="closeProduct()">✕</button>
+        ${pct ? `<span class="disc-badge" style="top:14px;right:60px">-${pct}%</span>` : ""}
+        ${p.img
+          ? `<img src="${esc(p.img)}" alt="${esc(p.name)}">`
+          : `<div class="empty-img">No image</div>`}
       </div>
 
       <div class="pd-body">
@@ -550,57 +547,47 @@ function openProduct(id) {
 
         <div class="pd-price">
           <span class="price">${fmt(p.price)}</span>
-          ${discPct(p) ? `<span class="old-price">${fmt(p.old)}</span><span class="pd-off">${discPct(p)}% OFF</span>` : ""}
+          ${pct ? `<span class="old-price">${fmt(p.old)}</span><span class="pd-off">${pct}% OFF</span>` : ""}
         </div>
-        ${discPct(p) ? `<div class="pd-save">Save ${discPct(p)}% - ${fmt(p.old - p.price)}</div>` : ""}
+        ${pct ? `<div class="pd-save">Save ${pct}% - ${fmt(p.old - p.price)}</div>` : ""}
 
-       <div class="pd-description">
-  <h4>Product Description</h4>
-  <p>${esc(
-    p.desc ||
-    "Quality furniture from Empire Furniture World."
-  )}</p>
-</div>
+        <div class="pd-actions">
+          <button type="button" class="btn" onclick="addToCart('${esc(p.id)}')">＋ Add to Cart</button>
+          <button type="button" class="btn wa" onclick="buyNow('${esc(p.id)}')">Buy Now</button>
+        </div>
 
         <div class="pd-specs">
           <span>✓ High quality</span>
           <span>✓ Custom sizes available</span>
           <span>✓ Reliable delivery</span>
-          <span>✓ WhatsApp ordering</span>
-        </div>
-
-        <div class="pd-actions">
-          <button type="button" class="btn" onclick="addToCart('${esc(p.id)}')">
-            ＋ Add to Cart
-          </button>
-          <button type="button" class="btn wa" onclick="buyNow('${esc(p.id)}')">
-            Buy Now
-          </button>
+          <span>✓ 24/7 ordering</span>
         </div>
       </div>
     </div>
 
-    ${
-      related.length
-        ? `<div class="pd-related">
-             <h4>More in ${esc(p.category)}</h4>
-             <div class="mini-rail">
-               ${related.map((r) => `
-                 <div class="mini-card" onclick="openProduct('${esc(r.id)}')">
-                   ${r.img ? `<img src="${esc(r.img)}" alt="${esc(r.name)}">` : ""}
-                   <p>${esc(r.name)}</p>
-                   <span class="mp">${fmt(r.price)}</span>
-                 </div>
-               `).join("")}
-             </div>
-           </div>`
-        : ""
-    }`;
+    <div class="pd-full">
+      <h4>Product Description</h4>
+      <div class="pd-text">${esc(p.desc || "Quality furniture from Empire Furniture World.")}</div>
+    </div>
 
+    ${related.length ? `
+      <div class="pd-related">
+        <h4>More in ${esc(p.category)}</h4>
+        <div class="mini-rail">
+          ${related.map((r) => `
+            <div class="mini-card" onclick="openProduct('${esc(r.id)}')">
+              ${r.img ? `<img src="${esc(r.img)}" alt="${esc(r.name)}">` : ""}
+              <p>${esc(r.name)}</p>
+              <span class="mp">${fmt(r.price)}</span>
+            </div>`).join("")}
+        </div>
+      </div>` : ""}
+  `;
+
+  $("productBox").scrollTop = 0;
   $("productModal").classList.add("open");
   document.body.classList.add("modal-open");
 }
-
 function closeProduct() {
   $("productModal")?.classList.remove("open");
   document.body.classList.remove("modal-open");
