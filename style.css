@@ -646,3 +646,55 @@ footer{border-top:1px solid var(--line);background:#030304;padding:48px 0 26px}
   .pd-full{padding:4px 18px 18px}
   .pd-text{font-size:1rem}
 }
+
+/* ===== FIX: big images must never cover text or price ===== */
+.pd-grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  align-items:start !important;
+}
+.pd-img{
+  position:relative !important;
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:1 / 1 !important;   /* fixed square box */
+  overflow:hidden !important;
+  background:#000 !important;
+}
+.pd-img img{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;   /* whole photo visible, never overflows */
+  display:block !important;
+}
+.pd-body{
+  position:relative !important;
+  z-index:2 !important;
+  min-width:0 !important;
+  background:var(--bg2) !important;
+  overflow:visible !important;
+}
+.pd-full,
+.pd-related{
+  position:relative !important;
+  z-index:2 !important;
+  background:var(--bg2) !important;
+  clear:both;
+}
+.pd-price,
+.pd-price .price,
+.pd-text{
+  position:relative;
+  z-index:2;
+}
+
+@media(max-width:640px){
+  .pd-grid{grid-template-columns:minmax(0,1fr) !important}
+  .pd-img{aspect-ratio:4 / 3 !important}
+}
